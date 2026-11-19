@@ -5,13 +5,14 @@ import {
   getResponseByGuestId,
   listGuests,
 } from "@/lib/db";
+import { getAppOrigin } from "@/lib/origin";
 
 export async function GET(request: Request) {
   if (!(await isAuthenticated())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const origin = new URL(request.url).origin;
+  const origin = getAppOrigin(request);
   const guests = listGuests().map((guest) => ({
     ...guest,
     response: getResponseByGuestId(guest.id) ?? null,
@@ -40,7 +41,7 @@ export async function POST(request: Request) {
     organization: body.organization,
   });
 
-  const origin = new URL(request.url).origin;
+  const origin = getAppOrigin(request);
   return NextResponse.json({
     guest: {
       ...guest,
