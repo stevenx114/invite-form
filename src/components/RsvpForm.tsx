@@ -125,34 +125,16 @@ export function RsvpForm({ guest, existing }: Props) {
         </p>
       </section>
 
-      <section className="animate-rise-delay-2 relative mb-6 overflow-hidden rounded-2xl shadow-[0_20px_50px_rgba(12,35,64,0.18)]">
-        <div className="relative aspect-[16/10] w-full overflow-hidden">
+      <section className="animate-rise-delay-2 mb-6 overflow-hidden rounded-2xl border border-line bg-card">
+        <div className="relative aspect-[16/10] w-full">
           <Image
             src="/images/beachcomber.jpg"
             alt="Beachcomber Hotel and Resort"
             fill
             priority
-            className="hero-zoom object-cover"
+            className="hero-zoom object-cover object-center"
             sizes="(max-width: 768px) 100vw, 768px"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/20 to-transparent" />
-          <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center text-white">
-            <p className="text-xs font-semibold uppercase tracking-[0.35em]">
-              Beachcomber
-            </p>
-            <p className="mt-1 text-[0.7rem] uppercase tracking-[0.28em] opacity-90">
-              Hotel &amp; Resort
-            </p>
-          </div>
-          <div className="absolute bottom-5 left-0 right-0 text-center text-white">
-            <p className="text-xs tracking-[0.2em]">2026 — 2027</p>
-            <p className="font-[family-name:var(--font-script)] text-3xl text-gold-soft">
-              celebrate together
-            </p>
-            <p className="font-[family-name:var(--font-display)] text-2xl tracking-wide">
-              SOCIAL EVENTS
-            </p>
-          </div>
         </div>
       </section>
 
@@ -199,11 +181,11 @@ export function RsvpForm({ guest, existing }: Props) {
         </section>
       ) : (
         <form onSubmit={onSubmit} className="space-y-5">
-          <fieldset className="field-card">
-            <legend className="mb-3 text-base font-semibold text-ink">
+          <div className="field-card" role="group" aria-labelledby="dietary-label">
+            <p id="dietary-label" className="field-label">
               Do you have any dietary requirements, restrictions, or food
               allergies? <span className="text-coral">*</span>
-            </legend>
+            </p>
             <div className="space-y-1">
               {(["no", "yes"] as const).map((value) => (
                 <label key={value} className="radio-row">
@@ -219,13 +201,13 @@ export function RsvpForm({ guest, existing }: Props) {
                 </label>
               ))}
             </div>
-          </fieldset>
+          </div>
 
           {dietary === "yes" && (
             <div className="field-card animate-rise">
               <label
                 htmlFor="dietaryDetails"
-                className="mb-3 block text-base font-semibold text-ink"
+                className="field-label"
               >
                 If yes, please provide details.{" "}
                 <span className="text-coral">*</span>
@@ -241,11 +223,11 @@ export function RsvpForm({ guest, existing }: Props) {
             </div>
           )}
 
-          <fieldset className="field-card">
-            <legend className="mb-3 text-base font-semibold text-ink">
+          <div className="field-card" role="group" aria-labelledby="lunch-label">
+            <p id="lunch-label" className="field-label">
               Please select your choice of lunch{" "}
               <span className="font-normal text-ink-soft">(optional)</span>
-            </legend>
+            </p>
             <div className="space-y-1">
               {LUNCH_OPTIONS.map((option) => (
                 <label key={option} className="radio-row">
@@ -269,14 +251,14 @@ export function RsvpForm({ guest, existing }: Props) {
                 </button>
               )}
             </div>
-          </fieldset>
+          </div>
 
-          <fieldset className="field-card">
-            <legend className="mb-3 text-base font-semibold text-ink">
+          <div className="field-card" role="group" aria-labelledby="attending-label">
+            <p id="attending-label" className="field-label">
               Would you be available and wish to attend the Christmas Celebration
               and Retirement Farewell in honour of Leanne?{" "}
               <span className="text-coral">*</span>
-            </legend>
+            </p>
             <div className="space-y-1">
               {(["yes", "no"] as const).map((value) => (
                 <label key={value} className="radio-row">
@@ -292,7 +274,7 @@ export function RsvpForm({ guest, existing }: Props) {
                 </label>
               ))}
             </div>
-          </fieldset>
+          </div>
 
           {error && (
             <p className="rounded-xl border border-coral/30 bg-coral/10 px-4 py-3 text-sm text-coral">
