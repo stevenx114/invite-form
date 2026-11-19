@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Christmas & Retirement RSVP
 
-## Getting Started
+Personalised RSVP website for the Gosford Tailoring Christmas Party and Leanne's Retirement celebration.
 
-First, run the development server:
+## Features
+
+- Beautiful invite page with Beachcomber / Pelican branding
+- Personalised "Dear" line and thank-you message per guest
+- RSVP fields: dietary requirements, lunch choice, attendance
+- Admin dashboard to create unique invite links, copy them, and review responses
+- Bulk guest import and CSV export
+
+## Quick start
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000/admin](http://localhost:3000/admin).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Default admin password: `admin123`  
+Change it in `.env.local`:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+ADMIN_PASSWORD=your-secure-password
+ADMIN_SECRET=a-long-random-string
+```
 
-## Learn More
+## How to use
 
-To learn more about Next.js, take a look at the following resources:
+1. Sign in at `/admin`
+2. Add a guest name (and optional organisation)
+3. Copy their personalised link, e.g. `/invite/abc123...`
+4. Send that link to the guest — they will see their own name on the form
+5. Watch responses come in on the admin page (or export CSV)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Data
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Guest and RSVP data is stored locally in `data/store.json` (created automatically).
+# invite-form
