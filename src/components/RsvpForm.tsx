@@ -97,10 +97,11 @@ export function RsvpForm({ guest, existing }: Props) {
       <div className="event-shell">
         <div className="event-hero animate-fade">
           <Image
-            src="/images/beachcomber.jpg"
+            src="/images/beachcomber-hq.jpg"
             alt="Beachcomber Hotel and Resort"
             fill
             priority
+            quality={95}
             className="object-cover object-center"
             sizes="(max-width: 1100px) 100vw, 1100px"
           />
@@ -307,11 +308,12 @@ export function RsvpForm({ guest, existing }: Props) {
                 </div>
                 <div className="event-venue-image">
                   <Image
-                    src="/images/pelican.jpg"
+                    src="/images/pelican-hq.jpg"
                     alt="Pelican Restaurant dining room"
                     fill
+                    quality={95}
                     className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 640px"
+                    sizes="(max-width: 960px) 100vw, 720px"
                   />
                 </div>
               </div>

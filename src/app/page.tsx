@@ -6,7 +6,7 @@ export default function HomePage() {
       <div className="absolute inset-0 overflow-hidden">
         <div
           className="hero-zoom absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url(/images/beachcomber.jpg)" }}
+          style={{ backgroundImage: "url(/images/beachcomber-hq.jpg)" }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-ink/55 via-ink/45 to-ink/80" />
       </div>
