@@ -123,7 +123,9 @@ export function RsvpForm({ guest, existing }: Props) {
               </li>
               <li>
                 <PinIcon />
-                <span>Beachcomber Hotel and Resort · Pelican Restaurant</span>
+                <span>
+                  Beachcomber Hotel and Resort, 200 Main Rd, Toukley NSW 2263
+                </span>
               </li>
             </ul>
           </header>
@@ -318,6 +320,7 @@ export function RsvpForm({ guest, existing }: Props) {
             <section className="event-section">
               <h2>Location</h2>
               <p className="event-location-name">Beachcomber Hotel and Resort</p>
+              <p className="event-muted">200 Main Rd, Toukley NSW 2263</p>
               <p className="event-muted">
                 Starting at 12:00 pm on December 12th 2026
               </p>
