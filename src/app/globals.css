@@ -16,11 +16,11 @@
   --background: var(--sand);
   --foreground: var(--ink);
 
-  --event-bg: #121212;
-  --event-panel: #1c1c1c;
-  --event-border: #2e2e2e;
-  --event-text: #f5f5f5;
-  --event-muted: #a3a3a3;
+  --event-bg: #eef2f4;
+  --event-panel: #ffffff;
+  --event-border: #d5dde3;
+  --event-text: #0c2340;
+  --event-muted: #243b53;
   --event-accent: #5f8a78;
   --event-accent-hover: #4a6f60;
 }
@@ -221,7 +221,9 @@ body {
   aspect-ratio: 16 / 9;
   overflow: hidden;
   border-radius: 1rem;
-  background: #000;
+  border: 1px solid var(--event-border);
+  background: var(--sand-deep);
+  box-shadow: 0 8px 24px rgba(12, 35, 64, 0.05);
 }
 
 @media (min-width: 768px) {
@@ -273,23 +275,43 @@ body {
   }
 }
 
+.event-eyebrow {
+  margin: 0 0 0.55rem;
+  color: var(--sage);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
 .event-greeting {
-  margin: 0 0 0.75rem;
-  color: var(--event-muted);
+  margin: 0 0 0.85rem;
+  color: var(--ink-soft);
   font-size: 0.95rem;
 }
 
 .event-greeting span {
-  color: var(--event-text);
-  font-weight: 600;
+  display: inline-block;
+  margin-left: 0.25rem;
+  color: var(--gold);
+  font-family: var(--font-script), cursive;
+  font-size: 1.85rem;
+  line-height: 1;
 }
 
 .event-title {
   margin: 0;
-  font-size: clamp(1.85rem, 4vw, 2.75rem);
-  font-weight: 700;
+  color: var(--ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(2rem, 4.2vw, 3rem);
+  font-weight: 600;
   line-height: 1.15;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
+}
+
+.event-title em {
+  font-style: italic;
+  color: var(--ink-soft);
 }
 
 .event-meta {
@@ -304,7 +326,7 @@ body {
   display: flex;
   align-items: flex-start;
   gap: 0.7rem;
-  color: var(--event-muted);
+  color: var(--ink-soft);
   font-size: 0.98rem;
   line-height: 1.4;
 }
@@ -312,7 +334,7 @@ body {
 .event-meta svg {
   flex-shrink: 0;
   margin-top: 0.1rem;
-  color: var(--event-text);
+  color: var(--sage);
 }
 
 .event-section {
@@ -327,13 +349,15 @@ body {
 
 .event-section h2 {
   margin: 0 0 1rem;
-  font-size: 1.15rem;
-  font-weight: 700;
+  color: var(--ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.45rem;
+  font-weight: 600;
 }
 
 .event-prose {
-  color: var(--event-muted);
-  font-size: 1rem;
+  color: var(--ink-soft);
+  font-size: 1.02rem;
   line-height: 1.7;
 }
 
@@ -346,13 +370,13 @@ body {
 }
 
 .event-prose strong {
-  color: var(--event-text);
+  color: var(--ink);
   font-weight: 600;
 }
 
 .event-kicker {
-  color: var(--event-text) !important;
-  font-size: 1.15rem !important;
+  color: var(--ink) !important;
+  font-size: 1.2rem !important;
   font-weight: 600;
 }
 
@@ -361,6 +385,7 @@ body {
   border: 1px solid var(--event-border);
   border-radius: 1rem;
   background: var(--event-panel);
+  box-shadow: 0 8px 24px rgba(12, 35, 64, 0.05);
 }
 
 .event-venue-copy {
@@ -369,14 +394,15 @@ body {
 
 .event-venue-name {
   margin: 0 0 0.35rem;
-  color: var(--event-text);
-  font-size: 1.05rem;
-  font-weight: 650;
+  color: var(--ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
 }
 
 .event-venue-copy p:last-child {
   margin: 0;
-  color: var(--event-muted);
+  color: var(--ink-soft);
   font-size: 0.95rem;
   line-height: 1.5;
 }
@@ -389,13 +415,14 @@ body {
 .event-location-name,
 .event-host-name {
   margin: 0 0 0.35rem;
+  color: var(--ink);
   font-size: 1.05rem;
   font-weight: 650;
 }
 
 .event-muted {
   margin: 0;
-  color: var(--event-muted);
+  color: var(--ink-soft);
   font-size: 0.95rem;
   line-height: 1.55;
 }
@@ -409,33 +436,36 @@ body {
   border-radius: 1rem;
   background: var(--event-panel);
   padding: 1.25rem;
+  box-shadow: 0 8px 24px rgba(12, 35, 64, 0.05);
 }
 
 .rsvp-card-label {
   margin: 0 0 0.4rem;
-  color: var(--event-muted);
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  color: var(--sage);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
 }
 
 .rsvp-card-title {
   margin: 0;
-  font-size: 1.25rem;
-  font-weight: 700;
+  color: var(--ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.45rem;
+  font-weight: 600;
   letter-spacing: -0.01em;
 }
 
 .rsvp-card-copy {
   margin: 0.55rem 0 1.15rem;
-  color: var(--event-muted);
+  color: var(--ink-soft);
   font-size: 0.92rem;
   line-height: 1.45;
 }
 
 .rsvp-card-copy strong {
-  color: var(--event-text);
+  color: var(--ink);
 }
 
 .rsvp-field {
@@ -452,20 +482,20 @@ body {
   margin: 0 0 0.55rem;
   float: none;
   padding: 0;
-  color: var(--event-text);
+  color: var(--ink);
   font-size: 0.92rem;
   font-weight: 600;
 }
 
 .rsvp-field legend span,
 .rsvp-field > label span {
-  color: #e07a6a;
+  color: var(--coral);
 }
 
 .rsvp-field legend em {
   font-style: normal;
   font-weight: 500;
-  color: var(--event-muted);
+  color: var(--ink-soft);
 }
 
 .rsvp-options {
@@ -487,28 +517,28 @@ body {
 }
 
 .rsvp-option:hover {
-  border-color: #444;
-  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(95, 138, 120, 0.35);
+  background: rgba(95, 138, 120, 0.06);
 }
 
 .rsvp-option:has(input:checked) {
-  border-color: var(--event-accent);
-  background: rgba(95, 138, 120, 0.12);
+  border-color: rgba(95, 138, 120, 0.45);
+  background: rgba(95, 138, 120, 0.1);
 }
 
 .rsvp-option input {
   margin-top: 0.15rem;
-  accent-color: var(--event-accent);
+  accent-color: var(--sage);
 }
 
 .rsvp-option span {
-  color: var(--event-muted);
+  color: var(--ink-soft);
   font-size: 0.9rem;
   line-height: 1.4;
 }
 
 .rsvp-option:has(input:checked) span {
-  color: var(--event-text);
+  color: var(--ink);
 }
 
 .rsvp-field textarea {
@@ -517,16 +547,16 @@ body {
   resize: vertical;
   border: 1px solid var(--event-border);
   border-radius: 0.7rem;
-  background: #141414;
-  color: var(--event-text);
+  background: white;
+  color: var(--ink);
   padding: 0.75rem 0.85rem;
   font: inherit;
   outline: none;
 }
 
 .rsvp-field textarea:focus {
-  border-color: var(--event-accent);
-  box-shadow: 0 0 0 3px rgba(95, 138, 120, 0.25);
+  border-color: var(--sage);
+  box-shadow: 0 0 0 3px rgba(95, 138, 120, 0.18);
 }
 
 .rsvp-clear {
@@ -534,7 +564,7 @@ body {
   padding: 0;
   border: none;
   background: none;
-  color: var(--event-accent);
+  color: var(--sage);
   font: inherit;
   font-size: 0.85rem;
   cursor: pointer;
@@ -545,10 +575,10 @@ body {
 .rsvp-error {
   margin: 0 0 0.85rem;
   padding: 0.7rem 0.8rem;
-  border: 1px solid rgba(224, 122, 106, 0.35);
+  border: 1px solid rgba(196, 92, 72, 0.3);
   border-radius: 0.7rem;
-  background: rgba(224, 122, 106, 0.1);
-  color: #f0a89c;
+  background: rgba(196, 92, 72, 0.08);
+  color: var(--coral);
   font-size: 0.88rem;
 }
 
@@ -556,8 +586,8 @@ body {
   width: 100%;
   margin-top: 0.25rem;
   border: none;
-  border-radius: 0.75rem;
-  background: var(--event-accent);
+  border-radius: 999px;
+  background: var(--sage);
   color: white;
   padding: 0.9rem 1rem;
   font: inherit;
@@ -567,7 +597,7 @@ body {
 }
 
 .rsvp-btn:hover:not(:disabled) {
-  background: var(--event-accent-hover);
+  background: var(--sage-deep);
 }
 
 .rsvp-btn:disabled {
@@ -579,9 +609,9 @@ body {
   width: 100%;
   margin-top: 0.5rem;
   border: 1px solid var(--event-border);
-  border-radius: 0.75rem;
+  border-radius: 999px;
   background: transparent;
-  color: var(--event-text);
+  color: var(--ink);
   padding: 0.85rem 1rem;
   font: inherit;
   font-weight: 600;
@@ -589,5 +619,5 @@ body {
 }
 
 .rsvp-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(12, 35, 64, 0.04);
 }

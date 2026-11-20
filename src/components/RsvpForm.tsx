@@ -108,11 +108,13 @@ export function RsvpForm({ guest, existing }: Props) {
 
         <div className="event-grid">
           <header className="event-header animate-rise">
+            <p className="event-eyebrow">Gosford Tailoring</p>
             <p className="event-greeting">
               Dear <span>{guest.name}</span>
             </p>
             <h1 className="event-title">
-              Christmas Party and Leanne&apos;s Retirement
+              Christmas Party and Leanne&apos;s{" "}
+              <em>Retirement</em>
             </h1>
             <ul className="event-meta">
               <li>
