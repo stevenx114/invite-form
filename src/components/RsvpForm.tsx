@@ -9,6 +9,29 @@ type Props = {
   existing: RsvpResponse | null;
 };
 
+function CalendarIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M3 9h18" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M8 3v4M16 3v4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function PinIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
+      <circle cx="12" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.6" />
+    </svg>
+  );
+}
+
 export function RsvpForm({ guest, existing }: Props) {
   const [attending, setAttending] = useState<"yes" | "no" | "">(
     existing?.attending ?? "",
@@ -55,240 +78,262 @@ export function RsvpForm({ guest, existing }: Props) {
     }
   }
 
-  const gratitudeLine = guest.organization
-    ? (
-        <>
-          We would like to extend our sincere gratitude to{" "}
-          <strong>{guest.name}</strong> and{" "}
-          <strong>{guest.organization}</strong> for their continued support of
-          Gosford Tailoring over the years.
-        </>
-      )
-    : (
-        <>
-          We would like to extend our sincere gratitude to{" "}
-          <strong>{guest.name}</strong> for their continued support of Gosford
-          Tailoring over the years.
-        </>
-      );
+  const gratitudeLine = guest.organization ? (
+    <>
+      We would like to extend our sincere gratitude to{" "}
+      <strong>{guest.name}</strong> and <strong>{guest.organization}</strong>{" "}
+      for their continued support of Gosford Tailoring over the years.
+    </>
+  ) : (
+    <>
+      We would like to extend our sincere gratitude to{" "}
+      <strong>{guest.name}</strong> for their continued support of Gosford
+      Tailoring over the years.
+    </>
+  );
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 pb-16 pt-6 sm:px-6 sm:pt-10">
-      <header className="animate-rise mb-8 text-center">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-sage">
-          Gosford Tailoring
-        </p>
-        <h1 className="font-[family-name:var(--font-display)] text-4xl leading-tight text-ink sm:text-5xl">
-          RSVP — Christmas Party and Leanne&apos;s{" "}
-          <em className="italic text-ink-soft">Retirement</em>
-        </h1>
-      </header>
-
-      <section className="animate-rise-delay-1 field-card mb-6 invite-prose text-[1.02rem] text-ink-soft">
-        <p>
-          <span className="font-semibold text-ink">Dear:</span>{" "}
-          <span className="font-[family-name:var(--font-script)] text-3xl leading-none text-gold">
-            {guest.name}
-          </span>
-        </p>
-        <p className="text-xl font-medium text-ink">Merry Christmas!</p>
-        <p>{gratitudeLine}</p>
-        <p>Welcome to join our Christmas Party and Leanne&apos;s Retirement.</p>
-        <p>
-          After 27 years of hard work, dedication and wonderful memories, it&apos;s
-          time to celebrate Leanne and wish her a very happy retirement! We are
-          incredibly grateful for all her hard work and the contributions she has
-          made over the years.
-        </p>
-        <p>
-          We&apos;d love for you to join us in giving Leanne a special send-off,
-          sharing some laughs and creating a few more wonderful memories together.
-          Please take a moment to complete this RSVP form and let us know whether
-          you&apos;ll be joining us.
-        </p>
-        <p>
-          The celebration will be held at{" "}
-          <strong>Beachcomber Hotel and Resort</strong>, starting at{" "}
-          <strong>12:00 pm</strong> on <strong>December 12th 2026</strong>.
-        </p>
-        <p>
-          We look forward to celebrating this special occasion with you!
-          <br />
-          Kind Regards,
-          <br />
-          Gary Xu and Leanne Bailey
-        </p>
-        <p className="text-sm">
-          Gary Contact Number: 0416119119
-          <br />
-          Leanne Contact Number: 0450568211
-        </p>
-      </section>
-
-      <section className="animate-rise-delay-2 mb-6 overflow-hidden rounded-2xl border border-line bg-card">
-        <div className="relative aspect-[16/10] w-full">
+    <div className="event-page">
+      <div className="event-shell">
+        <div className="event-hero animate-fade">
           <Image
             src="/images/beachcomber.jpg"
             alt="Beachcomber Hotel and Resort"
             fill
             priority
-            className="hero-zoom object-cover object-center"
-            sizes="(max-width: 768px) 100vw, 768px"
+            className="object-cover object-center"
+            sizes="(max-width: 1100px) 100vw, 1100px"
           />
         </div>
-      </section>
 
-      <section className="mb-6 overflow-hidden rounded-2xl border border-line bg-card shadow-[0_10px_30px_rgba(12,35,64,0.04)]">
-        <div className="border-b border-line px-5 py-4">
-          <h2 className="font-[family-name:var(--font-display)] text-2xl text-ink">
-            Pelican Restaurant
-          </h2>
-          <p className="mt-1 text-sm text-ink-soft">
-            Lunch will be served at Pelican Restaurant inside Beachcomber Hotel
-            and Resort.
-          </p>
-        </div>
-        <div className="relative aspect-[16/9] w-full">
-          <Image
-            src="/images/pelican.jpg"
-            alt="Pelican Restaurant dining room"
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 768px"
-          />
-        </div>
-      </section>
-
-      {done ? (
-        <section className="field-card animate-rise text-center">
-          <p className="font-[family-name:var(--font-display)] text-3xl text-ink">
-            Thank you, {guest.name}
-          </p>
-          <p className="mt-3 text-ink-soft">
-            Your RSVP has been received
-            {submittedAt
-              ? ` on ${new Date(submittedAt).toLocaleString()}`
-              : ""}
-            .
-          </p>
-          <button
-            type="button"
-            className="btn-secondary mt-6"
-            onClick={() => setDone(false)}
-          >
-            Update my response
-          </button>
-        </section>
-      ) : (
-        <form onSubmit={onSubmit} className="space-y-5">
-          <div className="field-card" role="group" aria-labelledby="dietary-label">
-            <p id="dietary-label" className="field-label">
-              Do you have any dietary requirements, restrictions, or food
-              allergies? <span className="text-coral">*</span>
+        <div className="event-grid">
+          <header className="event-header animate-rise">
+            <p className="event-greeting">
+              Dear <span>{guest.name}</span>
             </p>
-            <div className="space-y-1">
-              {(["no", "yes"] as const).map((value) => (
-                <label key={value} className="radio-row">
-                  <input
-                    type="radio"
-                    name="dietary"
-                    value={value}
-                    checked={dietary === value}
-                    onChange={() => setDietary(value)}
-                    required
-                  />
-                  <span className="capitalize">{value}</span>
-                </label>
-              ))}
-            </div>
-          </div>
+            <h1 className="event-title">
+              Christmas Party and Leanne&apos;s Retirement
+            </h1>
+            <ul className="event-meta">
+              <li>
+                <CalendarIcon />
+                <span>Sat, 12 Dec 2026 · 12:00 pm</span>
+              </li>
+              <li>
+                <PinIcon />
+                <span>Beachcomber Hotel and Resort · Pelican Restaurant</span>
+              </li>
+            </ul>
+          </header>
 
-          {dietary === "yes" && (
-            <div className="field-card animate-rise">
-              <label
-                htmlFor="dietaryDetails"
-                className="field-label"
-              >
-                If yes, please provide details.{" "}
-                <span className="text-coral">*</span>
-              </label>
-              <textarea
-                id="dietaryDetails"
-                className="admin-input min-h-28 resize-y"
-                value={dietaryDetails}
-                onChange={(e) => setDietaryDetails(e.target.value)}
-                required
-                placeholder="Please share any allergies or dietary needs"
-              />
-            </div>
-          )}
+          <aside className="event-sidebar animate-rise-delay-1">
+            <div className="event-sidebar-inner">
+              {done ? (
+                <div className="rsvp-card">
+                  <p className="rsvp-card-label">RSVP received</p>
+                  <h2 className="rsvp-card-title">Thank you, {guest.name}</h2>
+                  <p className="rsvp-card-copy">
+                    Your response has been saved
+                    {submittedAt
+                      ? ` on ${new Date(submittedAt).toLocaleString()}`
+                      : ""}
+                    .
+                  </p>
+                  <button
+                    type="button"
+                    className="rsvp-btn-secondary"
+                    onClick={() => setDone(false)}
+                  >
+                    Update response
+                  </button>
+                </div>
+              ) : (
+                <form className="rsvp-card" onSubmit={onSubmit}>
+                  <p className="rsvp-card-label">RSVP</p>
+                  <h2 className="rsvp-card-title">Confirm your attendance</h2>
+                  <p className="rsvp-card-copy">
+                    Personal invite for <strong>{guest.name}</strong>
+                  </p>
 
-          <div className="field-card" role="group" aria-labelledby="lunch-label">
-            <p id="lunch-label" className="field-label">
-              Please select your choice of lunch{" "}
-              <span className="font-normal text-ink-soft">(optional)</span>
-            </p>
-            <div className="space-y-1">
-              {LUNCH_OPTIONS.map((option) => (
-                <label key={option} className="radio-row">
-                  <input
-                    type="radio"
-                    name="lunch"
-                    value={option}
-                    checked={lunch === option}
-                    onChange={() => setLunch(option)}
-                  />
-                  <span>{option}</span>
-                </label>
-              ))}
-              {lunch && (
-                <button
-                  type="button"
-                  className="mt-2 text-sm text-sage underline-offset-2 hover:underline"
-                  onClick={() => setLunch("")}
-                >
-                  Clear lunch selection
-                </button>
+                  <fieldset className="rsvp-field">
+                    <legend>
+                      Attending? <span>*</span>
+                    </legend>
+                    <div className="rsvp-options">
+                      {(["yes", "no"] as const).map((value) => (
+                        <label key={value} className="rsvp-option">
+                          <input
+                            type="radio"
+                            name="attending"
+                            value={value}
+                            checked={attending === value}
+                            onChange={() => setAttending(value)}
+                            required
+                          />
+                          <span>
+                            {value === "yes"
+                              ? "Yes, I'll be there"
+                              : "No, I can't make it"}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  </fieldset>
+
+                  <fieldset className="rsvp-field">
+                    <legend>
+                      Dietary requirements? <span>*</span>
+                    </legend>
+                    <div className="rsvp-options">
+                      {(["no", "yes"] as const).map((value) => (
+                        <label key={value} className="rsvp-option">
+                          <input
+                            type="radio"
+                            name="dietary"
+                            value={value}
+                            checked={dietary === value}
+                            onChange={() => setDietary(value)}
+                            required
+                          />
+                          <span>{value === "yes" ? "Yes" : "No"}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </fieldset>
+
+                  {dietary === "yes" && (
+                    <div className="rsvp-field">
+                      <label htmlFor="dietaryDetails">
+                        Please provide details <span>*</span>
+                      </label>
+                      <textarea
+                        id="dietaryDetails"
+                        value={dietaryDetails}
+                        onChange={(e) => setDietaryDetails(e.target.value)}
+                        required
+                        placeholder="Allergies or dietary needs"
+                      />
+                    </div>
+                  )}
+
+                  <fieldset className="rsvp-field">
+                    <legend>
+                      Lunch choice <em>(optional)</em>
+                    </legend>
+                    <div className="rsvp-options">
+                      {LUNCH_OPTIONS.map((option) => (
+                        <label key={option} className="rsvp-option">
+                          <input
+                            type="radio"
+                            name="lunch"
+                            value={option}
+                            checked={lunch === option}
+                            onChange={() => setLunch(option)}
+                          />
+                          <span>{option}</span>
+                        </label>
+                      ))}
+                    </div>
+                    {lunch && (
+                      <button
+                        type="button"
+                        className="rsvp-clear"
+                        onClick={() => setLunch("")}
+                      >
+                        Clear lunch selection
+                      </button>
+                    )}
+                  </fieldset>
+
+                  {error && <p className="rsvp-error">{error}</p>}
+
+                  <button
+                    type="submit"
+                    className="rsvp-btn"
+                    disabled={submitting}
+                  >
+                    {submitting ? "Submitting…" : "Submit RSVP"}
+                  </button>
+                </form>
               )}
             </div>
-          </div>
+          </aside>
 
-          <div className="field-card" role="group" aria-labelledby="attending-label">
-            <p id="attending-label" className="field-label">
-              Would you be available and wish to attend the Christmas Celebration
-              and Retirement Farewell in honour of Leanne?{" "}
-              <span className="text-coral">*</span>
-            </p>
-            <div className="space-y-1">
-              {(["yes", "no"] as const).map((value) => (
-                <label key={value} className="radio-row">
-                  <input
-                    type="radio"
-                    name="attending"
-                    value={value}
-                    checked={attending === value}
-                    onChange={() => setAttending(value)}
-                    required
+          <div className="event-main animate-rise-delay-1">
+            <section className="event-section event-section-first">
+              <h2>Description</h2>
+              <div className="event-prose">
+                <p className="event-kicker">Merry Christmas!</p>
+                <p>{gratitudeLine}</p>
+                <p>
+                  Welcome to join our Christmas Party and Leanne&apos;s
+                  Retirement.
+                </p>
+                <p>
+                  After 27 years of hard work, dedication and wonderful
+                  memories, it&apos;s time to celebrate Leanne and wish her a
+                  very happy retirement! We are incredibly grateful for all her
+                  hard work and the contributions she has made over the years.
+                </p>
+                <p>
+                  We&apos;d love for you to join us in giving Leanne a special
+                  send-off, sharing some laughs and creating a few more
+                  wonderful memories together. Please take a moment to complete
+                  this RSVP form and let us know whether you&apos;ll be joining
+                  us.
+                </p>
+                <p>
+                  The celebration will be held at{" "}
+                  <strong>Beachcomber Hotel and Resort</strong>, starting at{" "}
+                  <strong>12:00 pm</strong> on{" "}
+                  <strong>December 12th 2026</strong>.
+                </p>
+              </div>
+            </section>
+
+            <section className="event-section">
+              <h2>Venue</h2>
+              <div className="event-venue-card">
+                <div className="event-venue-copy">
+                  <p className="event-venue-name">Pelican Restaurant</p>
+                  <p>
+                    Lunch will be served at Pelican Restaurant inside Beachcomber
+                    Hotel and Resort.
+                  </p>
+                </div>
+                <div className="event-venue-image">
+                  <Image
+                    src="/images/pelican.jpg"
+                    alt="Pelican Restaurant dining room"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 640px"
                   />
-                  <span className="capitalize">{value}</span>
-                </label>
-              ))}
-            </div>
-          </div>
+                </div>
+              </div>
+            </section>
 
-          {error && (
-            <p className="rounded-xl border border-coral/30 bg-coral/10 px-4 py-3 text-sm text-coral">
-              {error}
-            </p>
-          )}
+            <section className="event-section">
+              <h2>Location</h2>
+              <p className="event-location-name">Beachcomber Hotel and Resort</p>
+              <p className="event-muted">
+                Starting at 12:00 pm on December 12th 2026
+              </p>
+            </section>
 
-          <div className="flex justify-end pt-2">
-            <button type="submit" className="btn-primary" disabled={submitting}>
-              {submitting ? "Submitting…" : "Submit RSVP"}
-            </button>
+            <section className="event-section">
+              <h2>Host information</h2>
+              <p className="event-host-name">Gary Xu and Leanne Bailey</p>
+              <p className="event-muted">Gosford Tailoring</p>
+              <p className="event-muted">
+                Gary: 0416119119
+                <br />
+                Leanne: 0450568211
+              </p>
+            </section>
           </div>
-        </form>
-      )}
+        </div>
+      </div>
     </div>
   );
 }

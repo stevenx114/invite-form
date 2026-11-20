@@ -15,6 +15,14 @@
   --card: #ffffff;
   --background: var(--sand);
   --foreground: var(--ink);
+
+  --event-bg: #121212;
+  --event-panel: #1c1c1c;
+  --event-border: #2e2e2e;
+  --event-text: #f5f5f5;
+  --event-muted: #a3a3a3;
+  --event-accent: #5f8a78;
+  --event-accent-hover: #4a6f60;
 }
 
 @theme inline {
@@ -72,15 +80,6 @@ body {
   }
 }
 
-@keyframes soft-zoom {
-  from {
-    transform: scale(1.06);
-  }
-  to {
-    transform: scale(1);
-  }
-}
-
 .animate-rise {
   animation: rise-in 0.7s ease-out both;
 }
@@ -89,27 +88,11 @@ body {
   animation: rise-in 0.7s ease-out 0.12s both;
 }
 
-.animate-rise-delay-2 {
-  animation: rise-in 0.7s ease-out 0.24s both;
-}
-
 .animate-fade {
-  animation: fade-in 1s ease-out both;
+  animation: fade-in 0.8s ease-out both;
 }
 
-.hero-zoom {
-  animation: soft-zoom 8s ease-out both;
-}
-
-.invite-prose p {
-  margin: 0 0 1rem;
-  line-height: 1.7;
-}
-
-.invite-prose p:last-child {
-  margin-bottom: 0;
-}
-
+/* Admin / shared light UI */
 .field-card {
   background: var(--card);
   border: 1px solid var(--line);
@@ -210,4 +193,401 @@ body {
 .admin-input:focus {
   border-color: var(--sage);
   box-shadow: 0 0 0 3px rgba(95, 138, 120, 0.18);
+}
+
+/* Humanitix-style event invite */
+.event-page {
+  min-height: 100vh;
+  background: var(--event-bg);
+  color: var(--event-text);
+}
+
+.event-shell {
+  width: min(1100px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1.25rem 0 4rem;
+}
+
+@media (min-width: 768px) {
+  .event-shell {
+    width: min(1100px, calc(100% - 3rem));
+    padding-top: 1.75rem;
+  }
+}
+
+.event-hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: #000;
+}
+
+@media (min-width: 768px) {
+  .event-hero {
+    aspect-ratio: 21 / 9;
+    border-radius: 1.25rem;
+  }
+}
+
+.event-grid {
+  display: grid;
+  gap: 1.75rem;
+  margin-top: 1.75rem;
+  grid-template-areas:
+    "header"
+    "sidebar"
+    "main";
+}
+
+@media (min-width: 960px) {
+  .event-grid {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    grid-template-areas:
+      "header sidebar"
+      "main sidebar";
+    column-gap: 2.5rem;
+    row-gap: 0;
+    align-items: start;
+    margin-top: 2rem;
+  }
+}
+
+.event-header {
+  grid-area: header;
+}
+
+.event-sidebar {
+  grid-area: sidebar;
+}
+
+.event-main {
+  grid-area: main;
+}
+
+@media (min-width: 960px) {
+  .event-sidebar-inner {
+    position: sticky;
+    top: 1.5rem;
+  }
+}
+
+.event-greeting {
+  margin: 0 0 0.75rem;
+  color: var(--event-muted);
+  font-size: 0.95rem;
+}
+
+.event-greeting span {
+  color: var(--event-text);
+  font-weight: 600;
+}
+
+.event-title {
+  margin: 0;
+  font-size: clamp(1.85rem, 4vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.event-meta {
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.event-meta li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  color: var(--event-muted);
+  font-size: 0.98rem;
+  line-height: 1.4;
+}
+
+.event-meta svg {
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  color: var(--event-text);
+}
+
+.event-section {
+  margin-top: 2.25rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--event-border);
+}
+
+.event-section-first {
+  margin-top: 0;
+}
+
+.event-section h2 {
+  margin: 0 0 1rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.event-prose {
+  color: var(--event-muted);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.event-prose p {
+  margin: 0 0 1rem;
+}
+
+.event-prose p:last-child {
+  margin-bottom: 0;
+}
+
+.event-prose strong {
+  color: var(--event-text);
+  font-weight: 600;
+}
+
+.event-kicker {
+  color: var(--event-text) !important;
+  font-size: 1.15rem !important;
+  font-weight: 600;
+}
+
+.event-venue-card {
+  overflow: hidden;
+  border: 1px solid var(--event-border);
+  border-radius: 1rem;
+  background: var(--event-panel);
+}
+
+.event-venue-copy {
+  padding: 1.1rem 1.2rem 1rem;
+}
+
+.event-venue-name {
+  margin: 0 0 0.35rem;
+  color: var(--event-text);
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+
+.event-venue-copy p:last-child {
+  margin: 0;
+  color: var(--event-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.event-venue-image {
+  position: relative;
+  aspect-ratio: 16 / 9;
+}
+
+.event-location-name,
+.event-host-name {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+
+.event-muted {
+  margin: 0;
+  color: var(--event-muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.event-section .event-muted + .event-muted {
+  margin-top: 0.75rem;
+}
+
+.rsvp-card {
+  border: 1px solid var(--event-border);
+  border-radius: 1rem;
+  background: var(--event-panel);
+  padding: 1.25rem;
+}
+
+.rsvp-card-label {
+  margin: 0 0 0.4rem;
+  color: var(--event-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.rsvp-card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.rsvp-card-copy {
+  margin: 0.55rem 0 1.15rem;
+  color: var(--event-muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.rsvp-card-copy strong {
+  color: var(--event-text);
+}
+
+.rsvp-field {
+  margin: 0 0 1rem;
+  padding: 0;
+  border: none;
+  min-inline-size: 0;
+}
+
+.rsvp-field legend,
+.rsvp-field > label {
+  display: block;
+  width: 100%;
+  margin: 0 0 0.55rem;
+  float: none;
+  padding: 0;
+  color: var(--event-text);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.rsvp-field legend span,
+.rsvp-field > label span {
+  color: #e07a6a;
+}
+
+.rsvp-field legend em {
+  font-style: normal;
+  font-weight: 500;
+  color: var(--event-muted);
+}
+
+.rsvp-options {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.rsvp-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--event-border);
+  border-radius: 0.7rem;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.rsvp-option:hover {
+  border-color: #444;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.rsvp-option:has(input:checked) {
+  border-color: var(--event-accent);
+  background: rgba(95, 138, 120, 0.12);
+}
+
+.rsvp-option input {
+  margin-top: 0.15rem;
+  accent-color: var(--event-accent);
+}
+
+.rsvp-option span {
+  color: var(--event-muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.rsvp-option:has(input:checked) span {
+  color: var(--event-text);
+}
+
+.rsvp-field textarea {
+  width: 100%;
+  min-height: 5.5rem;
+  resize: vertical;
+  border: 1px solid var(--event-border);
+  border-radius: 0.7rem;
+  background: #141414;
+  color: var(--event-text);
+  padding: 0.75rem 0.85rem;
+  font: inherit;
+  outline: none;
+}
+
+.rsvp-field textarea:focus {
+  border-color: var(--event-accent);
+  box-shadow: 0 0 0 3px rgba(95, 138, 120, 0.25);
+}
+
+.rsvp-clear {
+  margin-top: 0.45rem;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--event-accent);
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.rsvp-error {
+  margin: 0 0 0.85rem;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid rgba(224, 122, 106, 0.35);
+  border-radius: 0.7rem;
+  background: rgba(224, 122, 106, 0.1);
+  color: #f0a89c;
+  font-size: 0.88rem;
+}
+
+.rsvp-btn {
+  width: 100%;
+  margin-top: 0.25rem;
+  border: none;
+  border-radius: 0.75rem;
+  background: var(--event-accent);
+  color: white;
+  padding: 0.9rem 1rem;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.rsvp-btn:hover:not(:disabled) {
+  background: var(--event-accent-hover);
+}
+
+.rsvp-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.rsvp-btn-secondary {
+  width: 100%;
+  margin-top: 0.5rem;
+  border: 1px solid var(--event-border);
+  border-radius: 0.75rem;
+  background: transparent;
+  color: var(--event-text);
+  padding: 0.85rem 1rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rsvp-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.04);
 }
