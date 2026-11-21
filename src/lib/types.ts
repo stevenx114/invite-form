@@ -4,6 +4,7 @@ export type Guest = {
   name: string;
   organization: string;
   email?: string;
+  emailedAt?: string;
   createdAt: string;
 };
 

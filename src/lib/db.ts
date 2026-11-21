@@ -71,6 +71,19 @@ export function updateGuestEmail(id: string, email: string): Guest | undefined {
   return guest;
 }
 
+export function setGuestEmailed(id: string, emailed: boolean): Guest | undefined {
+  const db = ensureDb();
+  const guest = db.guests.find((g) => g.id === id);
+  if (!guest) return undefined;
+  if (emailed) {
+    guest.emailedAt = new Date().toISOString();
+  } else {
+    delete guest.emailedAt;
+  }
+  saveDb(db);
+  return guest;
+}
+
 export function deleteGuest(id: string): boolean {
   const db = ensureDb();
   const before = db.guests.length;

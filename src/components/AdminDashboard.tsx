@@ -254,9 +254,27 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
         void navigator.clipboard.writeText(buildEmailText(guest));
       });
     setEmailedId(guest.id);
+    void setEmailedStatus(guest.id, true);
     setTimeout(
       () => setEmailedId((current) => (current === guest.id ? null : current)),
       6000,
+    );
+  }
+
+  // Records that the email draft was opened for this guest. Gmail links can't
+  // report whether the message was actually sent, so this is click-based.
+  async function setEmailedStatus(id: string, emailed: boolean) {
+    const res = await fetch(`/api/guests/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ emailed }),
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    setGuests((prev) =>
+      prev.map((g) =>
+        g.id === id ? { ...g, emailedAt: data.emailedAt ?? undefined } : g,
+      ),
     );
   }
 
@@ -283,6 +301,7 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
       "Name",
       "Organization",
       "Email",
+      "Emailed At",
       "Invite URL",
       "Responded",
       "Attending",
@@ -295,6 +314,7 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
       g.name,
       g.organization,
       g.email ?? "",
+      g.emailedAt ?? "",
       g.inviteUrl,
       g.response ? "yes" : "no",
       g.response?.attending ?? "",
@@ -516,7 +536,24 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
                       <p className="mt-2 break-all font-mono text-xs text-ink-soft">
                         {guest.inviteUrl}
                       </p>
-                      <div className="mt-2 flex flex-wrap gap-2 text-xs">
+                      <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+                        {guest.emailedAt && (
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-sage/15 px-2.5 py-1 font-medium text-sage-deep">
+                            ✓ Emailed{" "}
+                            {new Date(guest.emailedAt).toLocaleDateString(
+                              "en-AU",
+                              { day: "numeric", month: "short" },
+                            )}
+                            <button
+                              type="button"
+                              className="ml-0.5 text-sage-deep/70 underline hover:text-sage-deep"
+                              onClick={() => setEmailedStatus(guest.id, false)}
+                              title="Clear the emailed mark"
+                            >
+                              undo
+                            </button>
+                          </span>
+                        )}
                         {guest.response ? (
                           <>
                             <StatusChip
@@ -571,7 +608,11 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
                           rel="noreferrer"
                           className="btn-secondary !py-2 !px-3 text-sm inline-flex items-center"
                         >
-                          {emailedId === guest.id ? "Paste in draft (⌘V)" : "Email"}
+                          {emailedId === guest.id
+                            ? "Paste in draft (⌘V)"
+                            : guest.emailedAt
+                              ? "Email again"
+                              : "Email"}
                         </a>
                       ) : (
                         <button
