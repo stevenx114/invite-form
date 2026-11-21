@@ -3,6 +3,7 @@ export type Guest = {
   token: string;
   name: string;
   organization: string;
+  email?: string;
   createdAt: string;
 };
 

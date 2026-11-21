@@ -46,6 +46,7 @@ export function getGuestById(id: string): Guest | undefined {
 export function createGuest(input: {
   name: string;
   organization?: string;
+  email?: string;
 }): Guest {
   const db = ensureDb();
   const guest: Guest = {
@@ -53,9 +54,19 @@ export function createGuest(input: {
     token: nanoid(16),
     name: input.name.trim(),
     organization: (input.organization ?? "").trim(),
+    email: (input.email ?? "").trim(),
     createdAt: new Date().toISOString(),
   };
   db.guests.push(guest);
+  saveDb(db);
+  return guest;
+}
+
+export function updateGuestEmail(id: string, email: string): Guest | undefined {
+  const db = ensureDb();
+  const guest = db.guests.find((g) => g.id === id);
+  if (!guest) return undefined;
+  guest.email = email.trim();
   saveDb(db);
   return guest;
 }
