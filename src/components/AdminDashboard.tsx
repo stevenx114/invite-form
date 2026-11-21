@@ -21,6 +21,7 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
   const [creating, setCreating] = useState(false);
   const [formError, setFormError] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [emailedId, setEmailedId] = useState<string | null>(null);
   const [bulkText, setBulkText] = useState("");
   const [bulkCreating, setBulkCreating] = useState(false);
 
@@ -166,25 +167,97 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
     setTimeout(() => setCopiedId((current) => (current === guest.id ? null : current)), 1600);
   }
 
-  function gmailComposeUrl(guest: GuestWithResponse) {
-    const subject = "You're invited: Christmas & Retirement Celebration";
-    const body = [
+  const EMAIL_SUBJECT =
+    "You're invited: Gosford Tailoring Christmas & Leanne's Retirement Celebration";
+
+  function escapeHtml(value: string) {
+    return value
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;");
+  }
+
+  // Rich version of the email, matching the fonts/sizes of the original signature.
+  // HTML font sizes: 1 = 10px, 2 = 13px, 4 = 18px.
+  function buildEmailHtml(guest: GuestWithResponse) {
+    const name = escapeHtml(guest.name);
+    const url = escapeHtml(guest.inviteUrl);
+    const tre = "font-family:'trebuchet ms',sans-serif";
+    return `<div style="font-family:arial,helvetica,sans-serif;font-size:small">
+<div>Dear ${name},</div><br>
+<div>You're warmly invited to our Christmas &amp; Leanne's Retirement celebration. Please RSVP using the link below:</div><br>
+<div><a href="${url}">${url}</a></div><br>
+<div>
+<div><font color="#000000" face="arial,helvetica,sans-serif" size="2" style="background-color:rgb(255,255,255)">Best regards,</font></div>
+<div><br></div>
+<div><strong><font size="4">Gary Xu / Leanne Bailey</font></strong></div>
+<div><strong><font style="${tre}" size="2">Mobile:0416119119</font></strong></div>
+<div><font size="4" style="${tre}">Gosford Tailoring Co P/L</font></div>
+<div><font size="4" style="${tre}">Ozsports International P/L</font></div>
+<div style="${tre}">35 Shirlow St.&nbsp; Marrickville, NSW 2204</div>
+<div style="${tre}">Tel:(02) 9550 1289</div>
+<div style="${tre}">Email:&nbsp;&nbsp;&nbsp;&nbsp; <a href="mailto:gary@ozsports.net.au" style="color:#0000ff">gary@ozsports.net.au</a></div>
+<div style="${tre}">Website:&nbsp;<a href="http://www.ozsports.net.au/" style="color:#1155cc">www.ozsports.net.au</a></div>
+<div><br></div>
+<p>IMPORTANT: This message may contain confidential or legally privileged information. If you think it was sent to you by mistake, please delete all copies and advise the sender. For the purposes of the SPAM Act 2003, this email is authorised by<font size="1" style="${tre}">&nbsp;Ozsports International P/L.</font></p>
+</div>
+</div>`;
+  }
+
+  function buildEmailText(guest: GuestWithResponse) {
+    return [
       `Dear ${guest.name},`,
       "",
-      "You're warmly invited to our Christmas & Retirement celebration. Please RSVP using your personal link below:",
+      "You're warmly invited to our Christmas & Leanne's Retirement celebration. Please RSVP using the link below:",
       "",
       guest.inviteUrl,
       "",
-      "Kind regards,",
+      "Best regards,",
+      "",
+      "Gary Xu / Leanne Bailey",
+      "Mobile:0416119119",
+      "Gosford Tailoring Co P/L",
+      "Ozsports International P/L",
+      "35 Shirlow St.  Marrickville, NSW 2204",
+      "Tel:(02) 9550 1289",
+      "Email: gary@ozsports.net.au",
+      "Website: www.ozsports.net.au",
+      "",
+      "IMPORTANT: This message may contain confidential or legally privileged information. If you think it was sent to you by mistake, please delete all copies and advise the sender. For the purposes of the SPAM Act 2003, this email is authorised by Ozsports International P/L.",
     ].join("\n");
+  }
+
+  // Gmail compose links only support plain text, so the formatted email is put
+  // on the clipboard and the draft opens with the recipient + subject filled in.
+  // Paste (Cmd/Ctrl+V) into the draft body to get the full formatting.
+  function gmailComposeUrl(guest: GuestWithResponse) {
     const params = new URLSearchParams({
       view: "cm",
       fs: "1",
       to: guest.email ?? "",
-      su: subject,
-      body,
+      su: EMAIL_SUBJECT,
     });
     return `https://mail.google.com/mail/?${params.toString()}`;
+  }
+
+  function copyFormattedEmail(guest: GuestWithResponse) {
+    // Not awaited on purpose so the Gmail tab still opens from the same click.
+    navigator.clipboard
+      .write([
+        new ClipboardItem({
+          "text/html": new Blob([buildEmailHtml(guest)], { type: "text/html" }),
+          "text/plain": new Blob([buildEmailText(guest)], { type: "text/plain" }),
+        }),
+      ])
+      .catch(() => {
+        void navigator.clipboard.writeText(buildEmailText(guest));
+      });
+    setEmailedId(guest.id);
+    setTimeout(
+      () => setEmailedId((current) => (current === guest.id ? null : current)),
+      6000,
+    );
   }
 
   async function onSetEmail(guest: GuestWithResponse) {
@@ -493,11 +566,12 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
                       {guest.email ? (
                         <a
                           href={gmailComposeUrl(guest)}
+                          onClick={() => copyFormattedEmail(guest)}
                           target="_blank"
                           rel="noreferrer"
                           className="btn-secondary !py-2 !px-3 text-sm inline-flex items-center"
                         >
-                          Email
+                          {emailedId === guest.id ? "Paste in draft (⌘V)" : "Email"}
                         </a>
                       ) : (
                         <button

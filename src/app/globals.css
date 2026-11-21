@@ -498,6 +498,20 @@ body {
   color: var(--ink-soft);
 }
 
+.rsvp-field legend em.rsvp-optional {
+  display: inline-block;
+  margin-left: 0.35rem;
+  padding: 0.12rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(95, 138, 120, 0.16);
+  color: var(--sage-deep, var(--sage));
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
 .rsvp-options {
   display: grid;
   gap: 0.4rem;

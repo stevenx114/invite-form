@@ -78,7 +78,17 @@ export function RsvpForm({ guest, existing }: Props) {
     }
   }
 
-  const gratitudeLine = guest.organization ? (
+  // Gosford Tailoring guests are thanked by name only (not "Name and Gosford
+  // Tailoring"), but the line still mentions their support of Gosford Tailoring.
+  const isGosfordTailoring = /gosford tailoring/i.test(guest.organization);
+
+  const gratitudeLine = isGosfordTailoring ? (
+    <>
+      We would like to extend our sincere gratitude to{" "}
+      <strong>{guest.name}</strong> for their continued support of Gosford
+      Tailoring over the years.
+    </>
+  ) : guest.organization ? (
     <>
       We would like to extend our sincere gratitude to{" "}
       <strong>{guest.name}</strong> and <strong>{guest.organization}</strong>{" "}
@@ -109,18 +119,16 @@ export function RsvpForm({ guest, existing }: Props) {
 
         <div className="event-grid">
           <header className="event-header animate-rise">
-            <p className="event-eyebrow">Gosford Tailoring</p>
             <p className="event-greeting">
               Dear <span>{guest.name}</span>
             </p>
             <h1 className="event-title">
-              Christmas Party and Leanne&apos;s{" "}
-              <em>Retirement</em>
+              Gosford Tailoring Christmas Party and Leanne&apos;s Retirement
             </h1>
             <ul className="event-meta">
               <li>
                 <CalendarIcon />
-                <span>Sat, 12 Dec 2026 · 12:00 pm</span>
+                <span>Sat, 12 Dec 2026 · 12:00 pm – 4:00 pm</span>
               </li>
               <li>
                 <PinIcon />
@@ -223,7 +231,8 @@ export function RsvpForm({ guest, existing }: Props) {
 
                   <fieldset className="rsvp-field">
                     <legend>
-                      Lunch choice <em>(optional)</em>
+                      Lunch choice{" "}
+                      <em className="rsvp-optional">OPTIONAL</em>
                     </legend>
                     <div className="rsvp-options">
                       {LUNCH_OPTIONS.map((option) => (
@@ -271,8 +280,8 @@ export function RsvpForm({ guest, existing }: Props) {
                 <p className="event-kicker">Merry Christmas!</p>
                 <p>{gratitudeLine}</p>
                 <p>
-                  Welcome to join our Christmas Party and Leanne&apos;s
-                  Retirement.
+                  You&apos;re warmly invited to join us for our Christmas Party
+                  and to celebrate Leanne&apos;s retirement.
                 </p>
                 <p>
                   After 27 years of hard work, dedication and wonderful
@@ -290,7 +299,8 @@ export function RsvpForm({ guest, existing }: Props) {
                 <p>
                   The celebration will be held at{" "}
                   <strong>Beachcomber Hotel and Resort</strong>, starting at{" "}
-                  <strong>12:00 pm</strong> on{" "}
+                  <strong>12:00 pm</strong> and finishing at{" "}
+                  <strong>4:00 pm</strong> on{" "}
                   <strong>December 12th 2026</strong>.
                 </p>
               </div>
@@ -324,14 +334,14 @@ export function RsvpForm({ guest, existing }: Props) {
               <p className="event-location-name">Beachcomber Hotel and Resort</p>
               <p className="event-muted">200 Main Rd, Toukley NSW 2263</p>
               <p className="event-muted">
-                Starting at 12:00 pm on December 12th 2026
+                12:00 pm – 4:00 pm on December 12th 2026
               </p>
             </section>
 
             <section className="event-section">
               <h2>Host information</h2>
               <p className="event-host-name">Gary Xu and Leanne Bailey</p>
-              <p className="event-muted">Gosford Tailoring</p>
+              <p className="event-muted">Gosford Tailoring and Ozsports</p>
               <p className="event-muted">
                 Gary: 0416119119
                 <br />
