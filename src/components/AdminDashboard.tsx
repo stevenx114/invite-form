@@ -3,6 +3,44 @@
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import type { GuestWithResponse } from "@/lib/types";
 
+type StatusFilter =
+  | "all"
+  | "pending"
+  | "attending"
+  | "declined"
+  | "emailed"
+  | "not-emailed"
+  | "no-email";
+
+const FILTER_LABELS: Record<StatusFilter, string> = {
+  all: "All",
+  pending: "Awaiting RSVP",
+  attending: "Attending",
+  declined: "Not attending",
+  emailed: "Emailed",
+  "not-emailed": "Not emailed",
+  "no-email": "No email address",
+};
+
+function matchesFilter(guest: GuestWithResponse, filter: StatusFilter) {
+  switch (filter) {
+    case "pending":
+      return !guest.response;
+    case "attending":
+      return guest.response?.attending === "yes";
+    case "declined":
+      return guest.response?.attending === "no";
+    case "emailed":
+      return Boolean(guest.emailedAt);
+    case "not-emailed":
+      return !guest.emailedAt;
+    case "no-email":
+      return !guest.email;
+    default:
+      return true;
+  }
+}
+
 type Props = {
   initiallyAuthenticated: boolean;
 };
@@ -22,6 +60,8 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
   const [formError, setFormError] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [emailedId, setEmailedId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [bulkText, setBulkText] = useState("");
   const [bulkCreating, setBulkCreating] = useState(false);
 
@@ -53,6 +93,19 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
     const declined = guests.filter((g) => g.response?.attending === "no").length;
     return { total, responded, attending, declined, pending: total - responded };
   }, [guests]);
+
+  const filteredGuests = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    return guests.filter((g) => {
+      if (!matchesFilter(g, statusFilter)) return false;
+      if (!query) return true;
+      return [g.name, g.organization, g.email ?? ""].some((value) =>
+        value.toLowerCase().includes(query),
+      );
+    });
+  }, [guests, search, statusFilter]);
+
+  const filtersActive = search.trim() !== "" || statusFilter !== "all";
 
   async function onLogin(event: FormEvent) {
     event.preventDefault();
@@ -505,11 +558,63 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
           <div className="flex items-center justify-between border-b border-line px-5 py-4">
             <h2 className="font-[family-name:var(--font-display)] text-2xl">
               All guests
+              {!loading && guests.length > 0 && (
+                <span className="ml-2 text-base font-normal text-ink-soft">
+                  {filtersActive
+                    ? `${filteredGuests.length} of ${guests.length}`
+                    : guests.length}
+                </span>
+              )}
             </h2>
             <button type="button" className="btn-secondary !py-2 !px-3 text-sm" onClick={loadGuests}>
               Refresh
             </button>
           </div>
+
+          {!loading && guests.length > 0 && (
+            <div className="flex flex-col gap-3 border-b border-line px-5 py-4 sm:flex-row sm:items-center">
+              {/* .admin-input is width:100%, so size via wrappers instead */}
+              <div className="min-w-0 sm:flex-1">
+                <input
+                  type="search"
+                  className="admin-input"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search name, school or email"
+                  aria-label="Search guests"
+                />
+              </div>
+              <div className="sm:w-56 sm:shrink-0">
+                <select
+                  className="admin-input"
+                  value={statusFilter}
+                  onChange={(e) =>
+                    setStatusFilter(e.target.value as StatusFilter)
+                  }
+                  aria-label="Filter guests by status"
+                >
+                  {(Object.keys(FILTER_LABELS) as StatusFilter[]).map((key) => (
+                    <option key={key} value={key}>
+                      {FILTER_LABELS[key]} (
+                      {guests.filter((g) => matchesFilter(g, key)).length})
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {filtersActive && (
+                <button
+                  type="button"
+                  className="btn-secondary !py-2 !px-3 text-sm sm:shrink-0"
+                  onClick={() => {
+                    setSearch("");
+                    setStatusFilter("all");
+                  }}
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+          )}
 
           {loading ? (
             <p className="px-5 py-10 text-ink-soft">Loading guests…</p>
@@ -518,9 +623,13 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
               No guests yet. Add someone on the left to generate their invite
               link.
             </p>
+          ) : filteredGuests.length === 0 ? (
+            <p className="px-5 py-10 text-ink-soft">
+              No guests match your search or filter.
+            </p>
           ) : (
             <ul className="divide-y divide-line">
-              {guests.map((guest) => (
+              {filteredGuests.map((guest) => (
                 <li key={guest.id} className="px-5 py-4">
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                     <div className="min-w-0">
