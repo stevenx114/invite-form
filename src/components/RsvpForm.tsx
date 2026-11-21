@@ -9,6 +9,20 @@ type Props = {
   existing: RsvpResponse | null;
 };
 
+// Use a fixed locale and time zone so the server render and the client render
+// produce identical text (avoids hydration mismatches). The event is in NSW.
+function formatSubmittedAt(iso: string) {
+  return new Date(iso).toLocaleString("en-AU", {
+    timeZone: "Australia/Sydney",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
+
 function CalendarIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -148,7 +162,7 @@ export function RsvpForm({ guest, existing }: Props) {
                   <p className="rsvp-card-copy">
                     Your response has been saved
                     {submittedAt
-                      ? ` on ${new Date(submittedAt).toLocaleString()}`
+                      ? ` on ${formatSubmittedAt(submittedAt)}`
                       : ""}
                     .
                   </p>
