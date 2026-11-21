@@ -10,12 +10,12 @@ export type Guest = {
 
 export type LunchChoice =
   | "Roasted Chicken Cutlets, Tuscan Herb Cream"
-  | "Braised Short Ribs, Smokey Chipotle BBQ + Bistecca 4pp"
+  | "Braised Short Ribs, Smokey Chipotle BBQ + Bistecca"
   | "Market Fish, Sugarloaf & Fennel Slaw, Citrus Vinaigrette";
 
 export const LUNCH_OPTIONS: LunchChoice[] = [
   "Roasted Chicken Cutlets, Tuscan Herb Cream",
-  "Braised Short Ribs, Smokey Chipotle BBQ + Bistecca 4pp",
+  "Braised Short Ribs, Smokey Chipotle BBQ + Bistecca",
   "Market Fish, Sugarloaf & Fennel Slaw, Citrus Vinaigrette",
 ];
 
