@@ -17,6 +17,7 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
   const [loading, setLoading] = useState(initiallyAuthenticated);
   const [name, setName] = useState("");
   const [organization, setOrganization] = useState("");
+  const [email, setEmail] = useState("");
   const [creating, setCreating] = useState(false);
   const [formError, setFormError] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -90,7 +91,7 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
       const res = await fetch("/api/guests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, organization }),
+        body: JSON.stringify({ name, organization, email }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -100,6 +101,7 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
       setGuests((prev) => [data.guest, ...prev]);
       setName("");
       setOrganization("");
+      setEmail("");
     } catch {
       setFormError("Could not create guest");
     } finally {
@@ -121,14 +123,17 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
     try {
       const created: GuestWithResponse[] = [];
       for (const line of lines) {
-        const [guestName, ...orgParts] = line.split(",").map((p) => p.trim());
+        const [guestName, ...rest] = line.split(",").map((p) => p.trim());
         if (!guestName) continue;
+        const guestEmail = rest.find((p) => p.includes("@")) ?? "";
+        const orgParts = rest.filter((p) => p && p !== guestEmail);
         const res = await fetch("/api/guests", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name: guestName,
             organization: orgParts.join(", "),
+            email: guestEmail,
           }),
         });
         const data = await res.json();
@@ -161,10 +166,50 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
     setTimeout(() => setCopiedId((current) => (current === guest.id ? null : current)), 1600);
   }
 
+  function gmailComposeUrl(guest: GuestWithResponse) {
+    const subject = "You're invited: Christmas & Retirement Celebration";
+    const body = [
+      `Dear ${guest.name},`,
+      "",
+      "You're warmly invited to our Christmas & Retirement celebration. Please RSVP using your personal link below:",
+      "",
+      guest.inviteUrl,
+      "",
+      "Kind regards,",
+    ].join("\n");
+    const params = new URLSearchParams({
+      view: "cm",
+      fs: "1",
+      to: guest.email ?? "",
+      su: subject,
+      body,
+    });
+    return `https://mail.google.com/mail/?${params.toString()}`;
+  }
+
+  async function onSetEmail(guest: GuestWithResponse) {
+    const input = prompt(`Email address for ${guest.name}:`, guest.email ?? "");
+    if (input === null) return;
+    const res = await fetch(`/api/guests/${guest.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: input }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.error || "Could not save email");
+      return;
+    }
+    setGuests((prev) =>
+      prev.map((g) => (g.id === guest.id ? { ...g, email: data.email } : g)),
+    );
+  }
+
   function exportCsv() {
     const header = [
       "Name",
       "Organization",
+      "Email",
       "Invite URL",
       "Responded",
       "Attending",
@@ -176,6 +221,7 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
     const rows = guests.map((g) => [
       g.name,
       g.organization,
+      g.email ?? "",
       g.inviteUrl,
       g.response ? "yes" : "no",
       g.response?.attending ?? "",
@@ -317,6 +363,20 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
                 placeholder="Gorokan Public School"
               />
             </div>
+            <div>
+              <label htmlFor="email" className="mb-1.5 block text-sm font-medium">
+                Email{" "}
+                <span className="font-normal text-ink-soft">(optional)</span>
+              </label>
+              <input
+                id="email"
+                type="email"
+                className="admin-input"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="steven@example.com"
+              />
+            </div>
             {formError && <p className="text-sm text-coral">{formError}</p>}
             <button type="submit" className="btn-primary w-full" disabled={creating}>
               {creating ? "Creating…" : "Create personalised link"}
@@ -328,15 +388,15 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
               Bulk add
             </h2>
             <p className="text-sm text-ink-soft">
-              One guest per line. Optional organisation after a comma.
+              One guest per line. Optional organisation and email after commas.
               <br />
-              <code className="text-xs">Steven Xu, Gorokan Public School</code>
+              <code className="text-xs">Steven Xu, Gorokan Public School, steven@example.com</code>
             </p>
             <textarea
               className="admin-input min-h-36 resize-y font-mono text-sm"
               value={bulkText}
               onChange={(e) => setBulkText(e.target.value)}
-              placeholder={"Steven Xu, Gorokan Public School\nJane Smith"}
+              placeholder={"Steven Xu, Gorokan Public School, steven@example.com\nJane Smith"}
             />
             <button
               type="submit"
@@ -376,6 +436,9 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
                       </p>
                       {guest.organization && (
                         <p className="text-sm text-ink-soft">{guest.organization}</p>
+                      )}
+                      {guest.email && (
+                        <p className="text-sm text-ink-soft">{guest.email}</p>
                       )}
                       <p className="mt-2 break-all font-mono text-xs text-ink-soft">
                         {guest.inviteUrl}
@@ -427,6 +490,24 @@ export function AdminDashboard({ initiallyAuthenticated }: Props) {
                       >
                         {copiedId === guest.id ? "Copied" : "Copy link"}
                       </button>
+                      {guest.email ? (
+                        <a
+                          href={gmailComposeUrl(guest)}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="btn-secondary !py-2 !px-3 text-sm inline-flex items-center"
+                        >
+                          Email
+                        </a>
+                      ) : (
+                        <button
+                          type="button"
+                          className="btn-secondary !py-2 !px-3 text-sm"
+                          onClick={() => onSetEmail(guest)}
+                        >
+                          Add email
+                        </button>
+                      )}
                       <a
                         href={guest.inviteUrl}
                         target="_blank"
